@@ -1,0 +1,30 @@
+font:
+  normal:
+    family: Iosevka Nerd Font Mono
+    style: Regular
+
+  bold:
+    family: Iosevka Nerd Font Mono
+    style: Bold
+
+  italic:
+    family: Iosevka Nerd Font Mono
+    style: Italic
+
+  bold_italic:
+    family: Iosevka Nerd Font Mono
+    style: Bold Italic
+
+  size: 11
+
+colors:
+  primary:
+    background: '0x000000'
+
+window:
+  padding:
+    x: 40
+    y: 40
+
+scrolling:
+  history: 65000

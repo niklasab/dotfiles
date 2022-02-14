@@ -1,0 +1,290 @@
+#!/bin/bash
+
+####################################################
+# NOTE: Only tested with Ubuntu 20.04
+#
+# ### This script should be obtained by running: ###
+# 1. sudo apt install curl git
+# 2. mkdir -p $HOME/bin
+# 3. Pull latest yadm (I prefer $HOME/bin over /usr/local/bin)
+#    curl -fLo "$HOME/bin/yadm" https://github.com/TheLocehiliosan/yadm/raw/master/yadm && chmod a+x "$HOME/bin/yadm"
+# 4. source ~/.profile to put $HOME/bin in path (or logout and in)
+#    source ~/.profile
+# 5. Clone repo using yadm (works best on a fresh install, otherwise you may conflict with existing files)
+#    yadm clone https://github.com/niklasab/dotfiles
+# 6. Run bootstrap script (this script)
+#    yadm bootstrap
+# 7. Reboot
+# 8. Select  Gnome-flashback+i3 in login manager (GDM3)
+####################################################
+
+function update_ubuntu()
+{
+    sudo apt update -y
+    sudo apt upgrade -y
+
+    echo "Packages installed: $(sudo apt list --installed | wc -l)"
+    echo "Disk space:"
+    df -h
+}
+
+function install_guest_additions()
+{
+    sudo apt install build-essential dkms linux-headers-$(uname -r) -y
+
+    echo "Insert Guest Additions CD and install"
+    echo "Press enter when you have installed guest additions"
+    read
+}
+
+function install_official_pkgs()
+{
+    local pkgs=(
+    firefox # web browser
+    zathura # pdf viewer
+    python3
+    curl # data transfer
+    rclone # backup
+    duplicity # backup
+    nautilus # file browser (GUI)
+    ranger # file browser (terminal)
+    sxiv # image viewer
+    j4-dmenu-desktop # program launcher
+    firefox # web browser
+    vlc # media player
+    deluge # torrent client
+    zenity # custom popup
+    python3-pip # python package manager
+    python3-virtualenv # python virtual environments
+    ripgrep # faster grep searcher
+    gnome-flashback # gnome-session (to use gnome apps with i3)
+    fonts-font-awesome # Icons (for larger icons in i3blocks)
+    xcwd # get current folder (used when launching terminal)
+    sysstat # used to show cpu usage i3blocks
+    clangd # language server for c/c++ (used by coc-clangd)
+    picocom # terminal emulator (for serial port)
+    bear # generate compile_command.json for coc
+    flameshot # screenshot tool
+    p7zip-full # unzip 7z
+    openssh-server # ssh access to this computer
+    )
+    sudo apt install "${pkgs[@]}" -y &&
+    echo "Installed ${pkgs[@]}"
+}
+
+# Some packages are not available (or outdated) in the official Ubuntu repository.
+# To avoid building from source, install these packages from other repositories.
+# Note: Revise these when changing Ubuntu version
+function install_ppa_pkgs()
+{
+    # Install i3 gaps (gaps between windows)
+    local pkgs=(
+    i3-gaps # gaps between windows
+    picom # compositor, compton fork (e.g. shadows/opacity)
+    papirus-icon-theme # icons
+    alacritty # terminal emulator
+    neovim # editor
+    )
+    sudo add-apt-repository ppa:regolith-linux/release -y &&
+    sudo add-apt-repository ppa:papirus/papirus -y &&
+    sudo add-apt-repository ppa:aslatter/ppa -y &&
+    sudo add-apt-repository ppa:neovim-ppa/unstable -y &&
+    sudo apt update -y &&
+    sudo apt install "${pkgs[@]}" -y &&
+    echo "Installed ${pkgs[@]}"
+    # Disable the PPA after install
+    sudo sed -i 's/^/#/' /etc/apt/sources.list.d/regolith-linux-ubuntu*.list
+    sudo sed -i 's/^/#/' /etc/apt/sources.list.d/papirus-ubuntu-papirus*.list
+    sudo sed -i 's/^/#/' /etc/apt/sources.list.d/aslatter-ubuntu-ppa*.list
+    sudo sed -i 's/^/#/' /etc/apt/sources.list.d/neovim-ppa-ubuntu-unstable*.list
+    sudo apt update
+    echo "Disabled the PPAs after install"
+}
+
+function install_snaps()
+{
+    local snaps=(
+    spotify # music player
+    standard-notes # encrypted note-taking app
+    )
+    sudo snap install "${snaps[@]}" &&
+    echo "Installed ${snaps[@]}"
+}
+
+# Install pip packages that are not available in Ubuntu repository
+# Note: Use the --user flag to ensure we put these packages in the home
+#       folder of the current user (not system-wide!).
+# Note: Only install packages required for general scripts. For specific
+#       python projects you should use virtualenv.
+function install_pips()
+{
+    local pkgs=(
+    i3ipc # interface with i3
+    neovim # needed by coc
+    )
+    pip install --user "${pkgs[@]}" &&
+    echo "Installed ${pkgs[@]}"
+}
+
+# I3 is just a window manager, so run it through a gnome session to get some
+# of the administrative things out of the box (e.g. display management, power, wifi, screensaver)
+function setup_i3_gnome() {
+    # Use gnome-flashback for more gnome features (works better than the bare i3-gnome repo)
+    git clone https://github.com/regolith-linux/i3-gnome-flashback ~/tmp/i3-gnome-flashback
+    sudo make -C ~/tmp/i3-gnome-flashback install
+
+    # Remove Ubuntu splash and show kernel messages at boot
+    sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=""/g' /etc/default/grub
+    sudo update-grub
+
+    # Prevent gnome from stealing the tray icons
+    gsettings set org.gnome.gnome-flashback status-notifier-watcher false
+
+    # Hide Ubuntu logo on GDM3 (login screen)
+    sudo mv /usr/share/plymouth/ubuntu-logo.png /usr/share/plymouth/ubuntu-logo.png.bak
+
+    # Set icon theme
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+
+    # I prefer dark GTK theme, but use default theme because it plays better with most applications...
+
+    # Keybindings
+    gsettings set org.gnome.settings-daemon.plugins.media-keys suspend "['<Ctrl>F12']"
+    # There are also bindings under org.gnome.desktop.wm.keybindings
+}
+
+function set_background()
+{
+    # Recent Gnome has removed the possibility to set solid color
+    gsettings set org.gnome.desktop.background picture-uri "file://$HOME/.config/bg.png"
+    gsettings set org.gnome.desktop.screensaver picture-uri "file://$HOME/.config/bg.png"
+}
+
+# Remove unused Ubuntu default folders and decapitalize
+function setup_home_folders()
+{
+    mv $HOME/Downloads $HOME/downloads
+    mv $HOME/Documents $HOME/documents
+    rm -r $HOME/Music $HOME/Pictures $HOME/Public $HOME/Templates $HOME/Videos $HOME/Desktop
+    mkdir -p $HOME/dev/repos $HOME/tmp
+}
+
+# Install fuzzy finder (quickly browse files/folders on command-line and in vim)
+# Note: The version in Ubuntu repository is outdated
+function install_fzf()
+{
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &&
+    ~/.fzf/install --key-bindings --completion --no-update-rc
+}
+
+# Ubuntu packages an old version of Node. Node is needed
+# by COC.
+function install_nodejs()
+{
+    curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+    sudo apt install -y nodejs
+}
+
+function install_nvim_plugins()
+{
+    sh -c 'curl -fLo "$HOME/.config/nvim/autoload/plug.vim" --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim' &&
+    nvim +PlugInstall +qall
+}
+
+function setup_firefox()
+{
+    echo "Configure settings:"
+    echo "* Set download folder to $HOME/download"
+    firefox about:config
+    echo "Configure preferences"
+    echo "* Set fullscreen autohide false"
+    echo "* Disable everything homepage"
+    echo "* Disable all search suggestion / shortcuts"
+    echo "* Add search bar in toolbar"
+    echo "* Login"
+    firefox about:preferences
+    echo "Install addons"
+    firefox https://addons.mozilla.org/sv-SE/firefox/addon/ublock-origin/
+    firefox https://addons.mozilla.org/sv-SE/firefox/addon/df-youtube/
+    firefox https://addons.mozilla.org/sv-SE/firefox/addon/vimium-ff/
+    firefox https://addons.mozilla.org/sv-SE/firefox/addon/lastpass-password-manager/
+}
+
+# Install video recording software
+# https://www.crackedthecode.co/how-to-use-your-dslr-as-a-webcam-in-linux/
+function install_obs()
+{
+    sudo add-apt-repository ppa:obsproject/obs-studio
+    sudo apt update
+    sudo apt install v4l2loopback-dkms gphoto2 ffmpeg obs-studio -y
+    sudo sed -i 's/^/#/' /etc/apt/sources.list.d/obsproject-ubuntu*.list
+}
+
+#function install_ccstudio()
+#{
+    # 1. Download ccstudio installer from TI-website
+    # 2. Install in $HOME/dev/tools/ccs<version>
+    # 3. Download msp430-gcc toolchain from TI-website
+    # 4. Install in $HOME/dev/tools/...
+    # 5. Manually browse-select toolchain in CCStudio
+#}
+
+#function install_insync()
+#{
+    # Syncing google drive to local folder
+    # Download and install insync deb package
+    # Set sync folder to $HOME/documents/insync
+#}
+
+function init_yadm()
+{
+    cd "$HOME"
+    yadm submodule update --recursive --init
+    # Hiding the README and LICENSE file
+    # Reference: https://github.com/TheLocehiliosan/yadm/issues/93
+    yadm gitconfig core.sparseCheckout true
+    yadm sparse-checkout set '/*' '!README.md' '!UNLICENSE.md'
+
+    # I prefer not having a default global git config
+    read -p "yadm username[Firstname Lastname]: " name
+    yadm gitconfig user.name "$name"
+    read -p "yadm email[email@email.com]: " email
+    yadm gitconfig user.email "$email"
+    echo "Can be changed later using yadm gitconfig..."
+}
+
+function prompt_func()
+{
+    local question_text=$1
+    local func_name=$2
+    read -p "$question_text [y/n]: " usr_input
+    if [ "$usr_input" == "y" ]; then
+        eval $func_name
+    fi
+}
+
+bootstrap_ubuntu()
+{
+    echo "######### Installation wizard ###########"
+    prompt_func "Init yadm" "init_yadm"
+    prompt_func "Update ubuntu" "update_ubuntu"
+    prompt_func "Are you on virtual box?" "install_guest_additions"
+    prompt_func "Install official packages" "install_official_pkgs"
+    prompt_func "Install ppa packages" "install_ppa_pkgs"
+    prompt_func "Install snaps" "install_snaps"
+    prompt_func "Install python packages" "install_pips"
+    prompt_func "Setup home folders" "setup_home_folders"
+    prompt_func "Install fzf" "install_fzf"
+    prompt_func "Install nodejs" "install_nodejs"
+    prompt_func "Install nvim plugins" "install_nvim_plugins"
+    prompt_func "Setup i3 gnome" "setup_i3_gnome"
+    prompt_func "Set background" "set_background"
+    echo "######### WIZARD COMPLETED ###########"
+
+    echo "NOTE: If you ran from virtual box, make sure you shutdown"
+    echo "virtual box completely (not just reboot from commandline) afterwards"
+    exit 0
+}
+
+bootstrap_ubuntu

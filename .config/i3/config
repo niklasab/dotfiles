@@ -1,0 +1,159 @@
+# exec_always execute when I3 is restarted too (not just at startx)
+# --no-startup-id
+#     Use for applications that don't have startup-notifications
+#     Note: Must come immediately after exec
+#     Note: If your cursor is in loading state at startup, it may be because one
+#           of the exec are missing --no-startup-id
+
+set $gray1  #484848
+set $gray2  #333333
+set $gray3  #AAAAAA
+set $bg_bar #000000
+set $black  #000000
+set $white  #FFFFFF
+set $red    #BB4433
+set $bg     #444444
+
+# network manager
+exec_always --no-startup-id nm-applet
+
+# alternate layout between horizontal and vertical when opening new windows
+exec_always --no-startup-id alternating_layouts.py
+
+# screenshot tool
+exec_always --no-startup-id flameshot
+
+# gdrive sync
+exec_always --no-startup-id i3_isync.sh
+
+# start composite manager (compton fork)
+exec_always --no-startup-id i3_picom.sh
+
+set $mod Mod1
+
+new_window pixel 1
+
+# Won't wrap around if you e.g. press left when you are at most left
+force_focus_wrapping yes
+
+client.focused            $gray1   $gray1   $white    $gray2
+client.focused_inactive   $gray2   $gray2   $white    $black
+client.unfocused          $gray2   $gray2   $white    $black
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Back and Forth
+workspace_auto_back_and_forth no
+
+# kill focused window
+bindsym $mod+Shift+C kill
+
+# Open terminal in same pwd
+bindsym $mod+Return exec --no-startup-id alacritty --working-directory "`xcwd`"
+
+# Don't open in same pwd
+bindsym $MOD+Shift+Return exec --no-startup-id alacritty
+
+# Start program loader
+bindsym $mod+r exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -b -fn "iosevka:pixelsize=14" -nb '$black' -sb '$gray2' -nf '#AAA' -p 'run: '"
+
+# change focus (use window-tool to make focus behave intuitively)
+bindsym $mod+h exec --no-startup-id "window-tool focus left"
+bindsym $mod+j exec --no-startup-id "window-tool focus down"
+bindsym $mod+k exec --no-startup-id "window-tool focus up"
+bindsym $mod+l exec --no-startup-id "window-tool focus right"
+
+# move focused window
+bindsym $mod+Shift+H move left
+bindsym $mod+Shift+J move down
+bindsym $mod+Shift+K move up
+bindsym $mod+Shift+L move right
+
+# split in horizontal orientation
+bindsym $mod+underscore split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# assign workspace variables
+set $WS1 1
+set $WS2 2
+set $WS3 3
+set $WS4 4
+set $WS5 5
+
+# switch workspace
+bindsym $mod+1 workspace $WS1
+bindsym $mod+2 workspace $WS2
+bindsym $mod+3 workspace $WS3
+bindsym $mod+4 workspace $WS4
+bindsym $mod+5 workspace $WS5
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $WS1
+bindsym $mod+Shift+2 move container to workspace $WS2
+bindsym $mod+Shift+3 move container to workspace $WS3
+bindsym $mod+Shift+4 move container to workspace $WS4
+bindsym $mod+Shift+5 move container to workspace $WS5
+
+# restart i3 inplace (preserves layout/session)
+bindsym $mod+Shift+R restart
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+E exit
+
+# don't change focus on mouse hover
+focus_follows_mouse no
+
+# quick binds to open programs
+bindsym $mod+t exec nautilus "`xcwd`"
+bindsym $mod+w exec firefox
+
+# use mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# i3 gaps
+for_window [class=".*"] border pixel 0
+smart_gaps on
+smart_borders on
+gaps inner 40
+gaps outer 0
+
+# set popups during fullscreen mode
+popup_during_fullscreen smart
+
+# volume
+bindsym XF86AudioLowerVolume    exec --no-startup-id amixer -q -D pulse sset Master 5%- unmute
+bindsym XF86AudioRaiseVolume    exec --no-startup-id amixer -q -D pulse sset Master 5%+ unmute
+bindsym XF86AudioMute           exec --no-startup-id amixer -q -D pulse sset Master toggle
+
+
+# Info bar at top
+bar {
+	position top
+    status_command          i3blocks
+    bindsym button4         nop
+    bindsym button5         nop
+    tray_output             primary
+    separator_symbol        " "
+    workspace_buttons       yes
+    strip_workspace_numbers yes
+    # Font for icons and font for text
+    font pango:FontAwesome, Iosevka Nerd Font Mono 11
+    height 25
+
+	colors {
+		statusline $gray3
+		background $bg_bar
+		focused_workspace $bg_bar $bg_bar $white
+		inactive_workspace $bg_bar $bg_bar $gray3
+		urgent_workspace $bg_bar $red $white
+	}
+}
