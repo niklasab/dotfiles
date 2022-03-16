@@ -41,7 +41,7 @@ alias cdd="cd $HOME/documents/"
 alias vimsession="vim -c \"cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>\""
 alias cutvideo="losslesscut"
 alias startgnome="startx ~/.xinitrc gnome"
-alias externalip="wget http://ipinfo.io/ip -qO - | xargs"
+alias externalip="wget http://ipinfo.io/ip -qO -"
 # xargs trim the white space
 alias internalip="hostname -I | xargs"
 alias vim="nvim"
