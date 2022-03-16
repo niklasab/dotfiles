@@ -357,8 +357,9 @@ let g:coc_global_extensions = ['coc-clangd', 'coc-snippets']
 " Use tab for trigger completion with characters ahead and navigate. (also for
 " snippets)
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
+      \ pumvisible() ?
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
