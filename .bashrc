@@ -44,3 +44,7 @@ fi
 PS1="[\u@\h \W]$ "
 export VISUAL=nvim
 export EDITOR="$VISUAL"
+
+# Fix the ugly executable dir
+LS_COLORS='ow=01;34'
+export LS_COLORS

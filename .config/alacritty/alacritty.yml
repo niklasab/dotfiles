@@ -15,7 +15,7 @@ font:
     family: Iosevka Nerd Font Mono
     style: Bold Italic
 
-  size: 11
+  size: 12
 
 colors:
   primary:
@@ -23,8 +23,8 @@ colors:
 
 window:
   padding:
-    x: 40
-    y: 40
+    x: 20
+    y: 20
 
 scrolling:
   history: 65000

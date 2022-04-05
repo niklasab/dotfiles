@@ -121,5 +121,23 @@ function restorehex()
     xxd -r "$filename" > "$filename.restored"
 }
 
+function canon_m50_webcam()
+{
+    # Stream from canon m50
+    sudo modprobe v4l2loopback
+    gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
+}
+
+function transcode_for_davinci()
+{
+    # DaVinci free version doesn't support H264
+    mkdir transcoded;
+    for i in *.mp4; do
+        ffmpeg -i "$i" -vcodec mjpeg -q:v 2 -acodec pcm_s16be -q:a 0 -f mov "transcoded/${i%.*}.mov";
+    done
+}
+
 # Bash aliases not shared to public
-source $HOME/.bash_aliases_private
+if [ -f $HOME/.bash_aliases_private ]; then
+    source $HOME/.bash_aliases_private
+fi

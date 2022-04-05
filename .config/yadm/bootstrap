@@ -237,6 +237,14 @@ function install_obs()
     # Set sync folder to $HOME/documents/insync
 #}
 
+#function install_davinci_resolve()
+#{
+#    Download installer from website
+#    Run installation
+#    Install latest proprietary nvidia driver
+#    https://phoenixnap.com/kb/install-nvidia-drivers-ubuntu
+#}
+
 function init_yadm()
 {
     cd "$HOME"

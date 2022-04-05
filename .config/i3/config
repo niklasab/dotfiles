@@ -26,9 +26,6 @@ exec_always --no-startup-id flameshot
 # gdrive sync
 exec_always --no-startup-id i3_isync.sh
 
-# start composite manager (compton fork)
-exec_always --no-startup-id i3_picom.sh
-
 set $mod Mod1
 
 new_window pixel 1
@@ -36,9 +33,9 @@ new_window pixel 1
 # Won't wrap around if you e.g. press left when you are at most left
 force_focus_wrapping yes
 
-client.focused            $gray1   $gray1   $white    $gray2
-client.focused_inactive   $gray2   $gray2   $white    $black
-client.unfocused          $gray2   $gray2   $white    $black
+client.focused            $gray1   $gray1   $gray1    $gray1
+client.focused_inactive   $black   $black   $black    $black
+client.unfocused          $black   $black   $black    $black
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -120,10 +117,10 @@ bindsym $mod+w exec firefox
 floating_modifier $mod
 
 # i3 gaps
-for_window [class=".*"] border pixel 0
+for_window [class=".*"] border pixel 1
 smart_gaps on
 smart_borders on
-gaps inner 40
+gaps inner 15
 gaps outer 0
 
 # set popups during fullscreen mode
@@ -146,7 +143,7 @@ bar {
     workspace_buttons       yes
     strip_workspace_numbers yes
     # Font for icons and font for text
-    font pango:FontAwesome, Iosevka Nerd Font Mono 11
+    font pango:FontAwesome, Iosevka Nerd Font Mono 12
     height 25
 
 	colors {
