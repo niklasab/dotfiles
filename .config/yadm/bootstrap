@@ -40,20 +40,14 @@ function install_guest_additions()
 function install_official_pkgs()
 {
     local pkgs=(
-    firefox # web browser
-    zathura # pdf viewer
+    # These are essential packages for the setup to work
     python3
     curl # data transfer
-    rclone # backup
-    duplicity # backup
     nautilus # file browser (GUI)
     ranger # file browser (terminal)
     sxiv # image viewer
     j4-dmenu-desktop # program launcher
     firefox # web browser
-    vlc # media player
-    deluge # torrent client
-    zenity # custom popup
     python3-pip # python package manager
     python3-virtualenv # python virtual environments
     ripgrep # faster grep searcher
@@ -62,11 +56,20 @@ function install_official_pkgs()
     xcwd # get current folder (used when launching terminal)
     sysstat # used to show cpu usage i3blocks
     clangd # language server for c/c++ (used by coc-clangd)
-    picocom # terminal emulator (for serial port)
     bear # generate compile_command.json for coc
+
+    # Non-essential packages
+    zathura # pdf viewer
+    rclone # backup
+    vlc # media player
+    deluge # torrent client
+    zenity # custom popup
+    picocom # terminal emulator (for serial port)
     flameshot # screenshot tool
     p7zip-full # unzip 7z
     openssh-server # ssh access to this computer
+    ffmpeg # video converter
+    imagemagick # resize images
     )
     sudo apt install "${pkgs[@]}" -y &&
     echo "Installed ${pkgs[@]}"
@@ -219,6 +222,24 @@ function install_obs()
     sudo apt update
     sudo apt install v4l2loopback-dkms gphoto2 ffmpeg obs-studio -y
     sudo sed -i 's/^/#/' /etc/apt/sources.list.d/obsproject-ubuntu*.list
+}
+
+# https://www.kicad.org/download/ubuntu/
+function install_kicad()
+{
+    sudo add-apt-repository ppa:kicad/kicad-6.0-releases
+    sudo apt update
+    sudo apt install --install-recommends kicad
+    sudo sed -i 's/^/#/' /etc/apt/sources.list.d/kicad-ubuntu*.list
+}
+
+# Node version manager
+# Need latest node version for Vim plugins, but my Gatsby website needs
+# an older version.
+function install_nvm()
+{
+    # Adds nvm under $HOME/.nvm
+    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 }
 
 #function install_ccstudio()

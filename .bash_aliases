@@ -41,6 +41,14 @@ alias cdd="cd $HOME/documents/"
 alias vimsession="vim -c \"cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>\""
 alias cutvideo="losslesscut"
 alias startgnome="startx ~/.xinitrc gnome"
+alias externalip="wget http://ipinfo.io/ip -qO - | xargs"
+# xargs trim the white space
+alias internalip="hostname -I | xargs"
+alias vim="nvim"
+alias vimdiff='nvim -d'
+alias editbootstrap="vim $HOME/.config/yadm/bootstrap"
+alias editi3="vim $HOME/.config/i3/config"
+alias editalacritty="vim $HOME/.config/alacritty/alacritty.yml"
 
 # loop a command X times
 #     loop_cmd <n times> "<command>" <time s> <args...>
@@ -69,15 +77,6 @@ uniqlines()
     cat $1 | awk '!/./ || !seen[$0]++'
 }
 
-# include host-specific aliases
-if [ -f ~/.host_aliases ]; then
-    . ~/.host_aliases
-fi
-
-alias externalip="wget http://ipinfo.io/ip -qO - | xargs"
-# xargs trim the white space
-alias internalip="hostname -I | xargs"
-
 trynvchad()
 {
     sudo docker run -w /root -it --rm alpine:edge sh -uelic '
@@ -87,9 +86,6 @@ trynvchad()
     nvim
     '
 }
-
-alias vim="nvim"
-alias vimdiff='nvim -d'
 
 new_bashscript()
 {
@@ -108,7 +104,6 @@ new_bashscript()
     vim $scriptname
 }
 
-alias editbootstrap="vim $HOME/.config/yadm/bootstrap"
 function dumphex()
 {
     local filename="$1"
@@ -123,21 +118,71 @@ function restorehex()
 
 function canon_m50_webcam()
 {
-    # Stream from canon m50
+    # Stream from Canon m50
+    # https://www.crackedthecode.co/how-to-use-your-dslr-as-a-webcam-in-linux/
     sudo modprobe v4l2loopback
     gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
 }
 
-function transcode_for_davinci()
+function mp4_to_mov()
 {
-    # DaVinci free version doesn't support H264
-    mkdir transcoded;
-    for i in *.mp4; do
-        ffmpeg -i "$i" -vcodec mjpeg -q:v 2 -acodec pcm_s16be -q:a 0 -f mov "transcoded/${i%.*}.mov";
-    done
+    local inputvid="$1"
+    local outputvid="$2"
+
+    if ! [[ -f "$inputvid" ]]; then
+        echo "Input video doesn't exist"
+        echo "mp4_to_mov <input.mp4> <output.mov>"
+        return 1
+    fi
+
+    if [[ -f "$outputvid" ]]; then
+        echo "Output video already exists"
+        echo "mp4_to_mov <input.mp4> <output.mov>"
+        return 1
+    fi
+
+    if [[ -z "$outputvid" ]]; then
+        echo "Must supply output video name"
+        echo "mp4_to_mov <input.mp4> <output.mov>"
+        return 1
+    fi
+
+    ffmpeg -i "$inputvid" -vcodec mjpeg -q:v 2 -acodec pcm_s16be -q:a 0 -f mov "$outputvid";
 }
 
-# Bash aliases not shared to public
-if [ -f $HOME/.bash_aliases_private ]; then
-    source $HOME/.bash_aliases_private
+function mov_to_mp4()
+{
+    local inputvid="$1"
+    local outputvid="$2"
+
+    if ! [[ -f "$inputvid" ]]; then
+        echo "Input video doesn't exist"
+        echo "mov_to_mp4 <input.mov> <output.mp4>"
+        return 1
+    fi
+
+    if [[ -f "$outputvid" ]]; then
+        echo "Output video already exists"
+        echo "mov_to_mp4 <input.mov> <output.mp4>"
+        return 1
+    fi
+
+    if [[ -z "$outputvid" ]]; then
+        echo "Must supply output video name"
+        echo "mov_to_mp4 <input.mov> <output.mp4>"
+        return 1
+    fi
+
+    ffmpeg -i "$inputvid" -vcodec h264 -acodec aac "$outputvid"
+}
+
+if [ -d $HOME/.nvm ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+# Include host-specific aliases
+if [ -f $HOME/.host_aliases ]; then
+    source $HOME/.host_aliases
 fi
