@@ -6,12 +6,12 @@ interval=1
 color=#85c1e9
 
 [battery]
-command=echo -n "⚡"; acpi -b | head -n1 | cut -d',' -f2 | xargs
+command=echo -n " "; acpi -b | head -n1 | cut -d',' -f2 | xargs
 interval=10
 
 [cpu_usage]
 command=~/bin/i3blocks-contrib/cpu_usage
-interval=10
+interval=1
 # Note: Don't remove trailing whitespace
 LABEL= 
 COLOR_NORMAL=#AAAAAA
