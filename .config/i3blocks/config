@@ -6,7 +6,7 @@ interval=1
 color=#85c1e9
 
 [battery]
-command=i3blocks_battery.sh
+command=~/bin/i3blocks_battery.sh
 interval=10
 
 [cpu_usage]
