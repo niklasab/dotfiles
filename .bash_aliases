@@ -51,6 +51,7 @@ alias editi3="vim $HOME/.config/i3/config"
 alias editalacritty="vim $HOME/.config/alacritty/alacritty.yml"
 alias editvim="vim $HOME/.config/nvim/init.vim"
 alias grep="grep --color"
+alias lsmodified="ls -lahtr"
 
 # loop a command X times
 #     loop_cmd <n times> "<command>" <time s> <args...>

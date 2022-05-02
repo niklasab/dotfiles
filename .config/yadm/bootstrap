@@ -57,6 +57,7 @@ function install_official_pkgs()
     sysstat # used to show cpu usage i3blocks
     clangd # language server for c/c++ (used by coc-clangd)
     bear # generate compile_command.json for coc
+    acpi # battery monitor
 
     # Non-essential packages
     zathura # pdf viewer
