@@ -152,6 +152,19 @@ function mp4_to_mov()
     ffmpeg -i "$inputvid" -vcodec mjpeg -q:v 2 -acodec pcm_s16be -q:a 0 -f mov "$outputvid";
 }
 
+function all_mp4_to_mov()
+{
+    for file in *.MP4 *.mp4; do
+        [ -f "$file" ] || break
+        local filename="${file%.*}"
+        if [ -f "$filename.mov" ]; then
+            echo ".mov exist already"
+        else
+            mp4_to_mov $file "$filename.mov"
+        fi
+    done
+}
+
 function mov_to_mp4()
 {
     local inputvid="$1"
