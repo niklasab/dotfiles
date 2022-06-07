@@ -399,9 +399,9 @@ nmap <leader>rn <Plug>(coc-rename)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " GitGutter (Plugin)
 nmap <leader>hs <Plug>(GitGutterStageHunk)
-nmap <leader>hu <Plug>(GitGutterUndoHunk)
-nmap <leader>hn <Plug>(GitGutterNextHunk)
-nmap <leader>hp <Plug>(GitGutterPrevHunk)
+nmap gu <Plug>(GitGutterUndoHunk)
+nmap gn <Plug>(GitGutterNextHunk)
+nmap gp <Plug>(GitGutterPrevHunk)
 nmap ghp <Plug>(GitGutterPreviewHunk)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
