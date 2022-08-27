@@ -45,10 +45,5 @@ PS1="[\u@\h \W]$ "
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
-# Fix the ugly executable dir
-LS_COLORS='ow=01;34'
-export LS_COLORS
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Set colors for command-line commands (e.g. ls, tree)
+eval "$(dircolors $HOME/.config/.dir_colors)"

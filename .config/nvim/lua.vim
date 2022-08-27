@@ -78,11 +78,35 @@ options = {
       }
    },
 
+   -- :h bufferline-highlights
+   -- TODO: Find a way to access the color variables I defined in init.vim
    highlights = {
-      background = {
-         guibg = "#111111",
-      },
-    }
+       fill = {
+           guibg = "#111111"
+       },
+       background = {
+           guibg = "#111111"
+       },
+       buffer_selected = {
+           guibg = "#222222"
+       },
+       modified = {
+           guibg = "#222222"
+       },
+       modified_visible = {
+           guibg = "#222222"
+       },
+       modified_selected = {
+           guibg = "#222222"
+       },
+       separator = {
+           guifg = '#111111',
+           guibg = "#111111"
+       },
+       indicator_selected = {
+           guibg = "#222222"
+       },
+  }
 }
 
 require'diffview'.setup {

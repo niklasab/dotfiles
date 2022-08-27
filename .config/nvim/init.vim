@@ -152,6 +152,15 @@ autocmd Filetype markdown setlocal sts=4 sw=4 expandtab
 
 " Enable nested folding for markdown
 let g:markdown_fold_style = 'nested'
+let g:markdown_folding = 1
+
+" Remember fold state on close/open
+" https://vi.stackexchange.com/questions/5488/can-i-save-folds?rq=1
+augroup SaveManualFolds
+    autocmd!
+    autocmd BufWinLeave, BufLeave ?* silent! mkview | filetype detect
+    autocmd BufWinEnter ?* silent! loadview | filetype detect
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Theme
@@ -163,12 +172,16 @@ set termguicolors
 " Two sites to find other themes:
 " http://bytefluent.com/vivify/
 " https://vimcolorschemes.com/
-" Probably need another theme to show full semantic highlighting
-"colorscheme hipster
+" Old scheme:
+"    colorscheme hipster
+" TODO: Might need another theme to show full semantic highlighting
+
+let MainColor = "111111"
+let SubColor = "222222"
 
 " Override Jellybean colors
 let g:jellybeans_overrides = {
-\    'background': { 'guibg': '000000' },
+\    'background': { 'guibg': MainColor },
 \}
 
 colorscheme jellybeans
@@ -177,16 +190,20 @@ colorscheme jellybeans
 set background=dark
 
 " Override some colorscheme settings
-hi Normal guifg=#e8e8d3 guibg=#000000
+" Tip: run :hi to list all current colors
+" TODO: Match cterm colors with gui colors
 hi clear Search
-hi Search ctermbg=Gray guibg=#222222
+execute 'hi Search ctermbg=Gray guibg=#' . SubColor
 hi ErrorMsg guibg=black guifg=#ea5252
-hi Pmenu ctermfg=0 ctermbg=13 guifg=#ffffff guibg=#222222
+execute 'hi Pmenu ctermfg=0 ctermbg=13 guifg=#ffffff guibg=#' . SubColor
 hi PmenuSel ctermfg=0 ctermbg=13 guifg=black guibg=#b8cc52
-hi SignColumn ctermfg=14 ctermbg=242 guifg=#777777 guibg=#000000
+hi SignColumn ctermfg=14 ctermbg=242 guifg=#777777 guibg=NONE
 hi clear CursorLine
 hi clear NonText
 hi StatusLine guifg=#ffffff guibg=NONE
+execute 'hi Visual guibg=#' . SubColor
+execute 'hi Folded guibg=#' . SubColor
+execute 'hi ErrorMsg guibg=#' . MainColor
 
 " Pad to left by using fold column
 set foldcolumn=1
@@ -261,7 +278,7 @@ let g:lightline = {
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Startify (Plugin)
 
-let g:startify_session_dir = '~/vim-sessions/'
+let g:startify_session_dir = '~/.config/vim-sessions/'
 " Save session
 nnoremap <leader>ss :SSave<CR>
 

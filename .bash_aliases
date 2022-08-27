@@ -12,6 +12,7 @@ alias gst="git status -uno"
 alias branch="git rev-parse --abbrev-ref HEAD"
 alias branches="git branch --sort=committerdate"
 alias gl="git log --pretty=oneline --abbrev-commit"
+
 gitdate() {
     git log --after="$1 00:00" --before="$1 23:59"
 }
@@ -52,6 +53,7 @@ alias editalacritty="vim $HOME/.config/alacritty/alacritty.yml"
 alias editvim="vim $HOME/.config/nvim/init.vim"
 alias grep="grep --color"
 alias lsmodified="ls -lahtr"
+alias tree="tree -F --dirsfirst --noreport -C | sed -e 's/[├──└│]/ /g'"
 
 # loop a command X times
 #     loop_cmd <n times> "<command>" <time s> <args...>
@@ -192,11 +194,16 @@ function mov_to_mp4()
     ffmpeg -i "$inputvid" -vcodec h264 -acodec aac "$outputvid"
 }
 
-if [ -d $HOME/.nvm ]; then
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+function load_nvm()
+{
+    # This is slow, so don't load this automatically
+    # Must run load_nvm before using nvm (e.g. nvm use 16.0)
+    if [ -d $HOME/.nvm ]; then
+        #export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    fi
+}
 
 # Include host-specific aliases
 if [ -f $HOME/.host_aliases ]; then

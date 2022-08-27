@@ -5,10 +5,10 @@
 #     Note: If your cursor is in loading state at startup, it may be because one
 #           of the exec are missing --no-startup-id
 
+set $maincolor #111111
+set $subcolor  #222222
 set $gray1  #484848
-set $gray2  #333333
 set $gray3  #AAAAAA
-set $bg_bar #000000
 set $black  #000000
 set $white  #FFFFFF
 set $red    #BB4433
@@ -25,6 +25,9 @@ exec_always --no-startup-id flameshot
 
 # gdrive sync
 exec_always --no-startup-id i3_isync.sh
+
+# start composite manager picom (compton fork)
+exec_always --no-startup-id i3_picom.sh
 
 set $mod Mod1
 
@@ -53,7 +56,7 @@ bindsym $mod+Return exec --no-startup-id alacritty --working-directory "`xcwd`"
 bindsym $MOD+Shift+Return exec --no-startup-id alacritty
 
 # Start program loader
-bindsym $mod+r exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -b -fn "iosevka:pixelsize=14" -nb '$black' -sb '$gray2' -nf '#AAA' -p 'run: '"
+bindsym $mod+r exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -b -fn "iosevka:pixelsize=14" -nb '$maincolor' -sb '$subcolor' -nf '#AAA' -p 'run: '"
 
 # change focus (use window-tool to make focus behave intuitively)
 bindsym $mod+h exec --no-startup-id "window-tool focus left"
@@ -117,10 +120,11 @@ bindsym $mod+w exec firefox
 floating_modifier $mod
 
 # i3 gaps
-for_window [class=".*"] border pixel 1
+# Set border pixel when not using picom for determining selected window
+for_window [class=".*"] border pixel 0
 smart_gaps on
 smart_borders on
-gaps inner 15
+gaps inner 35
 gaps outer 0
 
 # set popups during fullscreen mode
@@ -148,9 +152,9 @@ bar {
 
 	colors {
 		statusline $gray3
-		background $bg_bar
-		focused_workspace $bg_bar $bg_bar $white
-		inactive_workspace $bg_bar $bg_bar $gray3
-		urgent_workspace $bg_bar $red $white
+		background $maincolor
+		focused_workspace $maincolor $maincolor $white
+		inactive_workspace $maincolor $maincolor $gray3
+		urgent_workspace $maincolor $red $white
 	}
 }
