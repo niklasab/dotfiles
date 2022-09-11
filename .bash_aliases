@@ -199,7 +199,8 @@ function load_nvm()
     # This is slow, so don't load this automatically
     # Must run load_nvm before using nvm (e.g. nvm use 16.0)
     if [ -d $HOME/.nvm ]; then
-        #export NVM_DIR="$HOME/.nvm"
+        export NVM_DIR="$HOME/.nvm"
+        echo "Load nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     fi

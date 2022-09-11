@@ -71,6 +71,7 @@ function install_official_pkgs()
     openssh-server # ssh access to this computer
     ffmpeg # video converter
     imagemagick # resize images
+    clang-format-12 # auto-format code
     )
     sudo apt install "${pkgs[@]}" -y &&
     echo "Installed ${pkgs[@]}"

@@ -27,7 +27,8 @@ exec_always --no-startup-id flameshot
 exec_always --no-startup-id i3_isync.sh
 
 # start composite manager picom (compton fork)
-exec_always --no-startup-id i3_picom.sh
+# It's nice, but bugs...
+# exec_always --no-startup-id i3_picom.sh
 
 set $mod Mod1
 
