@@ -413,6 +413,25 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
+" Only enable COC for certain files.
+" TODO: Use this list to not even load COC for other filetypes
+" See https://github.com/neoclide/coc.nvim/issues/349
+let g:coc_filetypes_enable = [ 'c', 'cpp']
+
+function! s:disable_coc_for_type()
+  if index(g:coc_filetypes_enable, &filetype) == -1
+    :silent! CocDisable
+  else
+    :silent! CocEnable
+  endif
+endfunction
+
+augroup CocGroup
+ autocmd!
+ autocmd BufNew,BufEnter,BufAdd,BufCreate * call s:disable_coc_for_type()
+augroup end
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " GitGutter (Plugin)
 nmap <leader>hs <Plug>(GitGutterStageHunk)

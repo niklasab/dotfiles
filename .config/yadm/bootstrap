@@ -176,6 +176,7 @@ function setup_home_folders()
 
 # Install fuzzy finder (quickly browse files/folders on command-line and in vim)
 # Note: The version in Ubuntu repository is outdated
+# TODO: Avoid completion and keybinds, use vim's instead...
 function install_fzf()
 {
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &&

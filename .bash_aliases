@@ -1,9 +1,12 @@
+# general
+# TODO: Disable Ctrl-Q and S if possible too (avoid hang)
+set -o ignoreeof # disable closing terminal on ctrl-d
+
 # fzf
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_COMMAND="rg --files --hidden"
-if [ -f .config/nvim/autoload/plugged/fzf/shell/key-bindings.bash ]; then
-    source .config/nvim/autoload/plugged/fzf/shell/key-bindings.bash
-    source .config/nvim/autoload/plugged/fzf/shell/completion.bash
+if [ -f $HOME/.config/nvim/autoload/plugged/fzf/shell/key-bindings.bash ]; then
+    source $HOME/.config/nvim/autoload/plugged/fzf/shell/key-bindings.bash
+    source $HOME/.config/nvim/autoload/plugged/fzf/shell/completion.bash
 fi
 
 # git
@@ -15,6 +18,9 @@ alias gl="git log --pretty=oneline --abbrev-commit"
 
 gitdate() {
     git log --after="$1 00:00" --before="$1 23:59"
+}
+gitrbi() {
+    git rebase -i HEAD~10
 }
 
 # convert video to compressed mp4 and webm
@@ -79,7 +85,10 @@ loop_cmd() {
 uniqlines()
 {
     # Uniq lines except blank lines
+    # https://stackoverflow.com/questions/11532157/remove-duplicate-lines-without-sorting
     cat $1 | awk '!/./ || !seen[$0]++'
+    # Or this?
+    # cat $1 | awk '!seen[$0]++'
 }
 
 trynvchad()
