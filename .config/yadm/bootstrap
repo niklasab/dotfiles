@@ -126,6 +126,7 @@ function install_pips()
     local pkgs=(
     i3ipc # interface with i3
     neovim # needed by coc
+    i3-resurrect # restoring i3 workspace layouts
     )
     pip install --user "${pkgs[@]}" &&
     echo "Installed ${pkgs[@]}"
@@ -215,6 +216,8 @@ function setup_firefox()
     firefox https://addons.mozilla.org/sv-SE/firefox/addon/df-youtube/
     firefox https://addons.mozilla.org/sv-SE/firefox/addon/vimium-ff/
     firefox https://addons.mozilla.org/sv-SE/firefox/addon/lastpass-password-manager/
+    firefox https://addons.mozilla.org/en-US/firefox/addon/kindle-it/
+    firefox https://addons.mozilla.org/en-US/firefox/addon/matte-black-v1/
 }
 
 # Install video recording software
