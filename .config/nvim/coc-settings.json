@@ -5,7 +5,7 @@
   "diagnostic.enableMessage": "jump",
   "diagnostic.virtualText": true,
   "diagnostic.refreshOnInsertMode": false,
-  "diagnostic.virtualTextCurrentLineOnly": false,
+  "diagnostic.virtualTextCurrentLineOnly": true,
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck"
   },

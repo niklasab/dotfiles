@@ -151,8 +151,8 @@ autocmd Filetype sv.yml setlocal sts=2 sw=2 expandtab
 autocmd Filetype markdown setlocal sts=4 sw=4 expandtab
 
 " Enable nested folding for markdown
-let g:markdown_fold_style = 'nested'
-let g:markdown_folding = 1
+"let g:markdown_fold_style = 'nested'
+"let g:markdown_folding = 1
 
 " Remember fold state on close/open
 " https://vi.stackexchange.com/questions/5488/can-i-save-folds?rq=1
@@ -439,6 +439,18 @@ nmap gu <Plug>(GitGutterUndoHunk)
 nmap gn <Plug>(GitGutterNextHunk)
 nmap gp <Plug>(GitGutterPrevHunk)
 nmap ghp <Plug>(GitGutterPreviewHunk)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Git commit message
+
+function GitCommitConfig()
+  setlocal spell
+  setlocal textwidth=72
+  setlocal colorcolumn=+1
+  highlight ColorColumn ctermbg=green guibg=orange
+endfun
+
+autocmd FileType gitcommit call GitCommitConfig()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Includes

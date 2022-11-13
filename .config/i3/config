@@ -57,7 +57,7 @@ bindsym $mod+Return exec --no-startup-id alacritty --working-directory "`xcwd`"
 bindsym $MOD+Shift+Return exec --no-startup-id alacritty
 
 # Start program loader
-bindsym $mod+r exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -b -fn "iosevka:pixelsize=14" -nb '$maincolor' -sb '$subcolor' -nf '#AAA' -p 'run: '"
+bindsym $mod+r exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -b -fn "iosevka" -nb '$maincolor' -sb '$subcolor' -nf '#AAA' -p 'run: '"
 
 # change focus (use window-tool to make focus behave intuitively)
 bindsym $mod+h exec --no-startup-id "window-tool focus left"
@@ -148,8 +148,9 @@ bar {
     workspace_buttons       yes
     strip_workspace_numbers yes
     # Font for icons and font for text
-    font pango:FontAwesome, Iosevka Nerd Font Mono 12
-    height 25
+    font pango:FontAwesome, Iosevka Nerd Font Mono
+    tray_padding 1
+
 
 	colors {
 		statusline $gray3

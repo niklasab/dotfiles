@@ -1,5 +1,3 @@
-separator_block_width=15
-
 [ip]
 command=echo " $(hostname -I | cut -d' ' -f1 | xargs)"
 interval=1
