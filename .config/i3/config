@@ -142,7 +142,6 @@ bindsym XF86AudioLowerVolume    exec --no-startup-id amixer -q -D pulse sset Mas
 bindsym XF86AudioRaiseVolume    exec --no-startup-id amixer -q -D pulse sset Master 5%+ unmute
 bindsym XF86AudioMute           exec --no-startup-id amixer -q -D pulse sset Master toggle
 
-
 # Info bar at top
 bar {
 	position top
@@ -156,7 +155,6 @@ bar {
     # Font for icons and font for text
     font pango:FontAwesome, Iosevka Nerd Font Mono
     tray_padding 1
-
 
 	colors {
 		statusline $gray3

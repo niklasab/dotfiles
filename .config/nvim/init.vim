@@ -12,7 +12,7 @@ Plug 'psliwka/vim-smoothie' " Smooth scroll
 Plug 'mhinz/vim-startify' " Session manager
 Plug 'tpope/vim-fugitive', " Work with git
 Plug 'airblade/vim-gitgutter' " Show git markers in sign column
-Plug 'rhysd/vim-clang-format', " Clang format code
+" Plug 'rhysd/vim-clang-format', " Clang format code
 Plug 'itchyny/lightline.vim', " Better statusbar
 Plug 'kyazdani42/nvim-web-devicons' " Icons
 Plug 'kyazdani42/nvim-tree.lua' " File browser
@@ -253,6 +253,22 @@ autocmd BufWinLeave * call clearmatches()
 " in other programs
 set clipboard=unnamedplus
 
+" There is an issue where xclip overwrites the cwd to "/", which causes xcwd
+" to return "/" instead of the directory Vim was opened in. Remove the -quiet
+" flag to avoid this. I use xcwd to open terminals in i3 in the same
+" directory. See https://github.com/neovim/issues/16372
+let g:clipboard = {
+\   'copy': {
+\     '+': ['xclip', '-i', '-selection', 'clipboard'],
+\     '*': ['xclip', '-i', '-selection', 'primary'],
+\   },
+\
+\   'paste': {
+\     '+': ['xclip', '-o', '-selection', 'clipboard'],
+\     '*': ['xclip', '-o', '-selection', 'primary'],
+\   },
+\ }
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NvimTree (Plugin)
 nnoremap <silent> <C-n> :NvimTreeToggle<CR>
@@ -370,7 +386,6 @@ set cmdheight=1
 set updatetime=300
 set shortmess+=c
 
-" Plugins
 let g:coc_global_extensions = ['coc-clangd', 'coc-snippets']
 
 " Use tab for trigger completion with characters ahead and navigate. (also for

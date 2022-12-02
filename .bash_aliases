@@ -58,9 +58,18 @@ alias editbootstrap="vim $HOME/.config/yadm/bootstrap"
 alias editi3="vim $HOME/.config/i3/config"
 alias editalacritty="vim $HOME/.config/alacritty/alacritty.yml"
 alias editvim="vim $HOME/.config/nvim/init.vim"
-alias grep="grep --color"
+alias grepcolor="grep -a --color=always"
 alias lsmodified="ls -lahtr"
 alias tree="tree -F --dirsfirst --noreport -C | sed -e 's/[├──└│]/ /g'"
+alias 7ze="7z e"
+alias l="ls -larth" # By modified date in reversed order
+
+# Commands for safer removal of files
+alias rmconfirm="rm -i"
+function dryrm()
+{
+    find . -depth -name "$1" -print
+}
 
 # loop a command X times
 #     loop_cmd <n times> "<command>" <time s> <args...>
@@ -213,6 +222,29 @@ function load_nvm()
         echo "Load nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    fi
+}
+
+function extract() {
+    local package=$1
+    if [ -f $package ] ; then
+        case $package in
+        *.tar.bz2) tar xvjf $package    ;;
+        *.tar.gz)  tar xvzf $package    ;;
+        *.tar.xz)  tar xf $package      ;;
+        *.bz2)     bunzip2 $package     ;;
+        *.rar)     unrar x $package     ;;
+        *.gz)      gunzip $package      ;;
+        *.tar)     tar xvf $package     ;;
+        *.tbz2)    tar xvjf $package    ;;
+        *.tgz)     tar xvzf $package    ;;
+        *.zip)     unzip $package       ;;
+        *.Z)       uncompress $package  ;;
+        *.7z)      7z x $package        ;;
+        *)         echo "don't know how to extract '$package'..." ;;
+        esac
+    else
+        echo "'$package' is not a valid file!"
     fi
 }
 
