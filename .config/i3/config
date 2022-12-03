@@ -65,6 +65,10 @@ bindsym $mod+j exec --no-startup-id "window-tool focus down"
 bindsym $mod+k exec --no-startup-id "window-tool focus up"
 bindsym $mod+l exec --no-startup-id "window-tool focus right"
 
+# Start timer
+bindsym $mod+F1 exec --no-startup-id "~/bin/timer.sh 1500"
+bindsym $mod+F2 exec --no-startup-id "~/bin/timer.sh 300"
+
 # move focused window
 bindsym $mod+Shift+H move left
 bindsym $mod+Shift+J move down

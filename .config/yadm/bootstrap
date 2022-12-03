@@ -217,7 +217,7 @@ function setup_firefox()
     firefox https://addons.mozilla.org/sv-SE/firefox/addon/vimium-ff/
     firefox https://addons.mozilla.org/sv-SE/firefox/addon/lastpass-password-manager/
     firefox https://addons.mozilla.org/en-US/firefox/addon/kindle-it/
-    firefox https://addons.mozilla.org/en-US/firefox/addon/matte-black-v1/
+    firefox https://addons.mozilla.org/en-US/firefox/addon/dark-nivgvrv/
 }
 
 # Install video recording software

@@ -1,3 +1,7 @@
+[pomo]
+command=~/bin/timer.sh
+interval=1
+
 [ip]
 command=echo " $(hostname -I | cut -d' ' -f1 | xargs)"
 interval=1
