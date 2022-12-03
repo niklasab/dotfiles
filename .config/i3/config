@@ -7,6 +7,8 @@
 
 set $maincolor #111111
 set $subcolor  #222222
+set $border_active #333333
+set $border_inactive #222222
 set $gray1  #484848
 set $gray3  #AAAAAA
 set $black  #000000
@@ -37,9 +39,9 @@ new_window pixel 1
 # Won't wrap around if you e.g. press left when you are at most left
 force_focus_wrapping yes
 
-client.focused            $gray1   $gray1   $gray1    $gray1
-client.focused_inactive   $black   $black   $black    $black
-client.unfocused          $black   $black   $black    $black
+client.focused $border_active $border_active $border_active $border_active
+client.focused_inactive $border_inactive $border_inactive $border_inactive $border_inactive
+client.unfocused $border_inactive $border_inactive $border_inactive $border_inactive
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -126,10 +128,10 @@ floating_modifier $mod
 
 # i3 gaps
 # Set border pixel when not using picom for determining selected window
-for_window [class=".*"] border pixel 0
-smart_gaps on
-smart_borders on
-gaps inner 35
+for_window [class=".*"] border pixel 1
+#smart_gaps on
+#smart_borders on
+gaps inner 0
 gaps outer 0
 
 # set popups during fullscreen mode
@@ -159,7 +161,6 @@ bar {
 	colors {
 		statusline $gray3
 		background $maincolor
-		focused_workspace $maincolor $maincolor $white
 		inactive_workspace $maincolor $maincolor $gray3
 		urgent_workspace $maincolor $red $white
 	}
