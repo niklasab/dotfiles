@@ -449,7 +449,7 @@ function GitCommitConfig()
   setlocal spell
   setlocal textwidth=72
   setlocal colorcolumn=+1
-  highlight ColorColumn ctermbg=green guibg=orange
+  highlight ColorColumn guibg=#36a3d9
 endfun
 
 autocmd FileType gitcommit call GitCommitConfig()
