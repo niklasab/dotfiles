@@ -4,7 +4,7 @@ set -o ignoreeof # disable closing terminal on ctrl-d
 
 # fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_COMMAND="rg --files --hidden"
+export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git'"
 if [ -f ~/.config/nvim/autoload/plugged/fzf/shell/key-bindings.bash ]; then
     source ~/.config/nvim/autoload/plugged/fzf/shell/key-bindings.bash
     source ~/.config/nvim/autoload/plugged/fzf/shell/completion.bash
