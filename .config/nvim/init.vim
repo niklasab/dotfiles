@@ -16,7 +16,7 @@ Plug 'rhysd/vim-clang-format', " Clang format code
 Plug 'itchyny/lightline.vim', " Better statusbar
 Plug 'kyazdani42/nvim-web-devicons' " Icons
 Plug 'kyazdani42/nvim-tree.lua' " File browser
-Plug 'akinsho/bufferline.nvim' " Show buffers as tabs
+"Plug 'akinsho/bufferline.nvim' " Show buffers as tabs
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
 Plug 'nanotech/jellybeans.vim' " Colorscheme
 Plug 'honza/vim-snippets' " Snippets collection
@@ -198,7 +198,7 @@ hi ErrorMsg guibg=black guifg=#ea5252
 execute 'hi Pmenu ctermfg=0 ctermbg=13 guifg=#ffffff guibg=#' . SubColor
 hi PmenuSel ctermfg=0 ctermbg=13 guifg=black guibg=#b8cc52
 hi SignColumn ctermfg=14 ctermbg=242 guifg=#777777 guibg=NONE
-hi clear CursorLine
+"hi clear CursorLine
 hi clear NonText
 hi StatusLine guifg=#ffffff guibg=NONE
 execute 'hi Visual guibg=#' . SubColor
@@ -255,10 +255,7 @@ set clipboard=unnamedplus
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NvimTree (Plugin)
-nnoremap <C-n> :NvimTreeToggle<CR>
-
-" Hide status line in nvim tree
-au BufEnter,BufWinEnter,WinEnter,CmdwinEnter * if bufname('%') =~ "NvimTree*" | set laststatus=0 | else | set laststatus=2 | endif
+nnoremap <silent> <C-n> :NvimTreeToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Lightline (Plugin)
@@ -268,7 +265,12 @@ let g:lightline = {
       \ 'colorscheme': 'ayu_dark_custom',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'percent' ] ],
+      \ },
+      \ 'inactive': {
+      \   'left': [ [ 'filename' ] ],
+      \   'right': [ ],
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead'
@@ -364,7 +366,7 @@ set tags=tags;/
 set hidden
 set nobackup
 set nowritebackup
-set cmdheight=2
+set cmdheight=1
 set updatetime=300
 set shortmess+=c
 
@@ -395,7 +397,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+"nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
